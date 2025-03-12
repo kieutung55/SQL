@@ -1,0 +1,83 @@
+USE test_schema;
+
+CREATE TABLE EMPLOYEES(
+	EMP_ID CHAR(9) NOT NULL PRIMARY KEY,
+    F_NAME VARCHAR(15) NOT NULL,
+    L_NAME VARCHAR(15) NOT NULL,
+    SSN CHAR(9),
+    B_DATE DATE,
+    SEX CHAR,
+    ADDRESS VARCHAR(30),
+    JOB_ID CHAR(9),
+    SALARY DECIMAL (10,2),
+    MANAGER_ID CHAR(9),
+    DEP_ID CHAR(9)
+);
+
+CREATE TABLE JOB_HISTORY (
+	EMPL_ID CHAR(9) NOT NULL,
+    START_DATE DATE,
+    JOBS_ID CHAR(9) NOT NULL,
+    DEPT_ID CHAR(9),
+    PRIMARY KEY (EMPL_ID,JOBS_ID)
+);
+
+CREATE TABLE JOBS (
+	JOB_IDENT CHAR(9) NOT NULL, 
+    JOB_TITLE VARCHAR(30),
+    MIN_SALARY DECIMAL(10,2),
+    MAX_SALARY DECIMAL(10,2),
+    PRIMARY KEY (JOB_IDENT));
+
+CREATE TABLE DEPARTMENTS (
+	DEPT_ID_DEP CHAR(9) NOT NULL, 
+    DEP_NAME VARCHAR(15) ,
+    MANAGER_ID CHAR(9),
+    LOC_ID CHAR(9),
+    PRIMARY KEY (DEPT_ID_DEP));
+
+CREATE TABLE LOCATIONS (
+	LOCT_ID CHAR(9) NOT NULL,
+    DEP_ID_LOC CHAR(9) NOT NULL,
+    PRIMARY KEY (LOCT_ID,DEP_ID_LOC));
+
+-- Sub-queries and Nested Selects
+SELECT * 
+FROM EMPLOYEES 
+WHERE salary < (SELECT AVG(salary) FROM EMPLOYEES);
+
+SELECT EMP_ID, SALARY, (SELECT MAX(SALARY) FROM EMPLOYEES) AS MAX_SALARY
+FROM EMPLOYEES;
+
+--  extract the first and last names of the oldest employee. 
+-- Since the oldest employee will be the one with the smallest date of birth
+SELECT F_NAME, L_NAME
+FROM EMPLOYEES 
+WHERE B_DATE = 	(SELECT MIN(B_DATE) FROM EMPLOYEES);
+
+-- The average salary of the top 5 earners in the company.
+SELECT AVG(SALARY) 
+FROM (SELECT SALARY FROM EMPLOYEES
+	  ORDER BY SALARY DESC 
+      LIMIT 5) AS SALARY_TABLE;
+      
+-- Practice Problems
+-- Write a query to find the average salary of the five least-earning employees.
+SELECT AVG(SALARY) 
+FROM (SELECT SALARY FROM EMPLOYEES 
+	  ORDER BY SALARY ASC 
+      LIMIT 5) AS SALARY_TABLE;
+      
+-- Write a query to find the records of employees older than the average age of all employees.
+SELECT * FROM EMPLOYEES
+WHERE YEAR (FROM_DAYS(DATEDIFF(CURRENT_DATE,B_DATE))) > 
+		   (SELECT AVG(YEAR(FROM_DAYS(DATEDIFF(CURRENT_DATE,B_DATE)))) 
+           FROM EMPLOYEES);
+           
+-- From the Job_History table, display the list of Employee IDs, years of service, 
+-- and average years of service for all entries.
+
+SELECT EMPL_ID, YEAR(FROM_DAYS(DATEDIFF(CURRENT_DATE, START_DATE))) AS SERVICE_YEARS,
+	(SELECT AVG(YEAR(FROM_DAYS(DATEDIFF(CURRENT_DATE, START_DATE))))
+    FROM JOB_HISTORY) AS AVG_SERVICE_YEARS
+FROM JOB_HISTORY;
