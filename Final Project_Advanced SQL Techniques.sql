@@ -1,6 +1,6 @@
-/* Exercise 1: Using Joins 
-1. Write and execute a SQL query to list the school names, 
-community names and average attendance for communities with a hardship index of 98.
+/*  Using Joins 
+SQL query to list the school names, community names and 
+average attendance for communities with a hardship index of 98.
 */
 
 USE chicago_data;
@@ -10,7 +10,7 @@ LEFT JOIN CHICAGOCENSUSDATA CCD
 ON CPS.COMMUNITY_AREA_NUMBER = CCD.COMMUNITY_AREA_NUMBER
 WHERE CCD.HARDSHIP_INDEX = 98;
 
-/* 2. Write and execute a SQL query to list all crimes that took place at a school. 
+/* SQL query to list all crimes that took place at a school. 
 Include case number, crime type and community name. CCD AS CENSUS DATA, CD AS CRIME DATA*/ 
 SELECT CD.CASE_NUMBER, CD.PRIMARY_TYPE, CPS.COMMUNITY_AREA_NAME
 FROM CHICAGOCRIMEDATA CD
@@ -18,8 +18,8 @@ INNER JOIN CHICAGOPUBLICSCHOOLS CPS
 ON CD.COMMUNITY_AREA_NUMBER = CPS.COMMUNITY_AREA_NUMBER
 AND CD.LOCATION_DESCRIPTION LIKE '%SCHOOL%';
 
-/* Exercise 2: Creating a View
-1. Write and execute a SQL statement to create a view showing the columns listed in the following table, 
+/* Creating a View
+Write and execute a SQL statement to create a view showing the columns listed in the following table, 
 with new column names as shown in the second column. */
 CREATE VIEW Public_Schools (School_Name, Safety_Rating, Family_Rating, Environment_Rating, 
 							Instruction_Rating, Leaders_Rating, Teachers_Rating) AS 
@@ -29,16 +29,16 @@ FROM CHICAGOPUBLICSCHOOLS;
 
 SELECT * FROM Public_Schools;
 
-/* Exercise 3: Creating a Stored Procedure
-1. Write the structure of a query to create or replace a stored procedure 
+/* Creating a Stored Procedure
+1. Structure of a query to create or replace a stored procedure 
 called UPDATE_LEADERS_SCORE that takes a in_School_ID parameter as an integer 
 and a in_Leader_Score parameter as an integer.*/
 
-/* 2. Inside your stored procedure, write a SQL statement to update the Leaders_Score 
+/* 2. Inside stored procedure, there is  an SQL statement to update the Leaders_Score 
 field in the CHICAGO_PUBLIC_SCHOOLS table for the school identified by in_School_ID to 
 the value in the in_Leader_Score parameter.*/
 
-/* 3. Inside your stored procedure, write a SQL IF statement to update the Leaders_Icon field 
+/* 3. Inside stored procedure,there is SQL IF statement to update the Leaders_Icon field 
 in the CHICAGO_PUBLIC_SCHOOLS table for the school identified by in_School_ID using the following information.*/
 DELIMITER @
 CREATE PROCEDURE UPDATE_LEADERS_SCORE(
