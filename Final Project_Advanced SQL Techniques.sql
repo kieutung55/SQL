@@ -81,8 +81,8 @@ BEGIN
 END @
 DELIMITER ;
 
-/* 4. Run your code to create the stored procedure.
-Write a query to call the stored procedure, passing a valid school ID and a leader score of 50, 
+/* Test code to of the stored procedure.
+A query to call the stored procedure, passing a valid school ID and a leader score of 50, 
 to check that the procedure works as expected. */
 CALL UPDATE_LEADERS_SCORE(610038, 50);
 CALL UPDATE_LEADERS_SCORE(610281, 50);
